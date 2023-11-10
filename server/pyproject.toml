@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "server"
+version = "0.0.1"
+description = "Data Wagon Server"
+authors = ["quiner"]
+readme = "../README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.104.1"
+beanie = "^1.23.1"
+pydantic-settings = "^2.0.3"
+uvicorn = "^0.24.0.post1"
+redis = "^5.0.1"
+python-decouple = "^3.8"
+fastapi-jwt = "^0.2.0"
+bcrypt = "^4.0.1"
+fastapi-mail = "^1.4.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
