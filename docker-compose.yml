@@ -11,7 +11,7 @@ services:
   fastapi:
     build:
       context: server
-      dockerfile: server/Dockerfile
+      dockerfile: Dockerfile
     environment:
       # Server
       - "MONGO_URL=mongodb://mongo_db:27017/db"
@@ -24,3 +24,11 @@ services:
     depends_on:
       - redis_db
       - mongo_db
+  wagon_emulator:
+    build:
+      context: wagon_emulator
+      dockerfile: Dockerfile
+    environment:
+      - "SERVER_URL=http://fastapi:8000/"
+    depends_on:
+      - fastapi

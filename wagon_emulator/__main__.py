@@ -1,6 +1,7 @@
 import csv
 import os
 from datetime import datetime
+from time import sleep
 
 import requests
 
@@ -26,8 +27,10 @@ class WagonData:
 def make_request(wagon: WagonData):
     url = server_url + f"trains/wagon/{wagon.wagon_id}"
 
-    x = requests.post(url, json=wagon.to_json())
-    print(x, wagon.wagon_id)
+    try:
+        requests.post(url, json=wagon.to_json())
+    except requests.exceptions.HTTPError as e:
+        print(e.response.text)
 
 
 wagon_data: list[WagonData] = []
@@ -50,6 +53,8 @@ while True:
     if wagon_data[index].operdate.time() > datetime.now().time():
         index -= 10
         break
+
+sleep(10)
 
 try:
     while True:
