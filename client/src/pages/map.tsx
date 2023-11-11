@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@mui/material';
+import { Map as LeafletMap, Polyline, polyline } from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
+import { queryWay, Node, Way } from '~/geo/overpass';
+import MapSearch from '~/components/mapSearch';
 
 function MapPage() {
+
   return (
     <Box>
       <MapContainer
@@ -27,6 +31,8 @@ function MapPage() {
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
         </Marker>
+
+        <MapSearch />
       </MapContainer>
     </Box>
   );
