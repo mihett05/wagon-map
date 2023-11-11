@@ -26,6 +26,7 @@ const styles = {
     height: '100%',
     width: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    padding: 50,
   },
 };
 
@@ -77,7 +78,7 @@ function LoginPage() {
                   id="password"
                   autoComplete="current-password"
                 />
-                <Button component="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
+                <Button fullWidth variant="contained" sx={{ mt: 2 }} href={`/map`}>
                   Войти
                 </Button>
                 <Button fullWidth variant="outlined" sx={{ mt: 1, mb: 2 }} href={`/signup`}>

@@ -24,6 +24,7 @@ const styles = {
     height: '100%',
     width: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    padding: 50,
   },
 };
 
@@ -40,7 +41,7 @@ export default function SignUp() {
   return (
     <div style={styles.header}>
       <div style={styles.content}>
-        <Container component="main" maxWidth="xs">
+        <Container maxWidth="xs">
           <CssBaseline />
           <Card>
             <CardContent
@@ -97,7 +98,13 @@ export default function SignUp() {
                     />
                   </Grid>
                 </Grid>
-                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  href={`/map`}
+                >
                   Зарегистрироваться
                 </Button>
                 <Grid container justifyContent="flex-end">
