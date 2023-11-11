@@ -1,8 +1,14 @@
 from datetime import datetime
-from typing import Annotated, Any, Optional
+from enum import Enum
+from typing import Annotated, Any, Optional, Literal
 
 from beanie import Document, Indexed
 from pydantic import BaseModel, EmailStr
+
+
+class UserRole(str, Enum):
+    OPERATOR = "operator"
+    ADMIN = "admin"
 
 
 class UserAuth(BaseModel):
@@ -10,6 +16,10 @@ class UserAuth(BaseModel):
 
     email: EmailStr
     password: str
+
+
+class AdminUserAuth(UserAuth):
+    token: str
 
 
 class UserUpdate(BaseModel):
@@ -34,6 +44,7 @@ class User(Document, UserOut):
 
     password: str
     email_confirmed_at: datetime | None = None
+    role: str = Literal[UserRole.ADMIN, UserRole.OPERATOR]
 
     def __repr__(self) -> str:
         return f"<User {self.email}>"
