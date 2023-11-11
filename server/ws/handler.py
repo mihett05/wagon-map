@@ -1,5 +1,6 @@
 import asyncio
 from inspect import getfullargspec
+from opcode import hasjabs
 from fastapi import WebSocket
 
 from .types import EventType, Request, Response, WsUserData
@@ -74,4 +75,5 @@ class EventHandler:
                 for cls in deps:
                     if issubclass(t, cls):
                         kwargs[arg] = deps[cls]
-            asyncio.create_task(handler(**kwargs))
+            await handler(**kwargs)
+            # asyncio.create_task(handler(**kwargs))

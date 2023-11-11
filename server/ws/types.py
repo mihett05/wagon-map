@@ -1,5 +1,4 @@
 from enum import Enum
-from uuid import UUID
 
 from pydantic import BaseModel, Field
 
@@ -9,13 +8,13 @@ class EventType(str, Enum):
 
 
 class Request(BaseModel):
-    uid: UUID
+    uid: str
     event: EventType
 
 
 class Response(BaseModel):
-    uid: UUID = Field(default_factory=UUID)
-    event: EventType = Field(default="")
+    uid: str = ""
+    event: EventType = ""
 
 
 class WsUserData(BaseModel):
