@@ -10,7 +10,7 @@ export const theme = createTheme({
     fontSize: 14,
     fontFamily: 'Montserrat',
     h1: {
-      fontWeight: 700,
+      fontWeight: 500,
       fontSize: 32,
     },
     body1: {

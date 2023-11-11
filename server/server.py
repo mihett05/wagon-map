@@ -6,6 +6,7 @@ from routes.basic_route import basic_router
 from routes.auth import auth_router
 from routes.mail import mail_router
 from routes.register import register_router
+from routes.web_socket import ws_router
 from routes.trains import trains_router
 
 app = FastAPI(
@@ -26,6 +27,7 @@ app.include_router(auth_router)
 app.include_router(mail_router)
 app.include_router(register_router)
 app.include_router(trains_router)
+app.include_router(ws_router)
 
 
 @app.on_event("startup")
