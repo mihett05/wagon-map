@@ -6,8 +6,7 @@ from parser.peregon import parse_peregon_to_json
 
 async def main():
     await init_db()
-    # await parse_coords()
-    # parse_coords_json()
+    parse_coords_json()
     parse_peregon_to_json()
 
 
