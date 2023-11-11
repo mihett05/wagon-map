@@ -18,6 +18,7 @@ bcrypt = "^4.0.1"
 fastapi-mail = "^1.4.1"
 aiohttp = "^3.8.6"
 websockets = "^12.0"
+networkx = "^3.2.1"
 
 
 [build-system]
