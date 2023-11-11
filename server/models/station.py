@@ -1,12 +1,7 @@
-import pymongo
-from beanie import Document
-
-from schemas.geojson import GeoJSON
+from pydantic import BaseModel
 
 
-class Station(Document):
+class Station(BaseModel):
     id: int
-    cooridnates: GeoJSON
-
-    class Settings:
-        indexes = [[("coordinates", pymongo.GEOSPHERE)]]
+    lat: float
+    lon: float

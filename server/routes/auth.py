@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException, Security
 from fastapi_jwt import JwtAuthorizationCredentials
 
-from models.auth import AccessToken, RefreshToken
-from models.user import User, UserAuth
+from models.auth import RefreshToken, AccessToken
+from models.user import UserAuth
+from schemas.user import UserDocument
 from jwt import access_security, refresh_security
-from util.password import hash_password, check_password
+from util.password import check_password
 
 
 auth_router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -13,7 +14,7 @@ auth_router = APIRouter(prefix="/auth", tags=["Auth"])
 @auth_router.post("/login")
 async def login(user_auth: UserAuth) -> RefreshToken:
     """Authenticate and returns the user's JWT."""
-    user = await User.by_email(user_auth.email)
+    user = await UserDocument.by_email(user_auth.email)
     if user is None or not check_password(password=user_auth.password, hashed_password=user.password):
         raise HTTPException(status_code=401, detail="Bad email or password")
     if user.email_confirmed_at is None:

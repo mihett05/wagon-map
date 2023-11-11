@@ -1,6 +1,6 @@
 import asyncio
 from init_server import init_db
-from parser.coords import parse_coords, parse_coords_json
+from parser.coords import parse_coords_json
 from parser.peregon import parse_peregon_to_json
 
 

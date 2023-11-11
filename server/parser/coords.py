@@ -3,11 +3,11 @@ import json
 import asyncio
 from pathlib import Path
 from schemas.geojson import GeoJSON
-from models.station import Station
+from schemas.station import StationDocument
 
 
 async def save_station(st_id: int, lat: float, lon: float):
-    st = Station(id=int(st_id), cooridnates=GeoJSON.point(lat, lon))
+    st = StationDocument(id=int(st_id), cooridnates=GeoJSON.point(lat, lon))
     await st.create()
 
 

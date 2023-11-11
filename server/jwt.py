@@ -3,7 +3,7 @@ from datetime import timedelta
 from fastapi_jwt import JwtAuthorizationCredentials, JwtAccessBearer, JwtRefreshBearer
 
 from config import config
-from models.user import User
+from schemas.user import UserDocument
 
 ACCESS_EXPIRES = timedelta(minutes=15)
 REFRESH_EXPIRES = timedelta(days=30)
@@ -21,12 +21,12 @@ refresh_security = JwtRefreshBearer(
 )
 
 
-async def user_from_credentials(auth: JwtAuthorizationCredentials) -> User | None:
+async def user_from_credentials(auth: JwtAuthorizationCredentials) -> UserDocument | None:
     """Return the user associated with auth credentials."""
-    return await User.by_email(auth.subject["username"])
+    return await UserDocument.by_email(auth.subject["username"])
 
 
-async def user_from_token(token: str) -> User | None:
+async def user_from_token(token: str) -> UserDocument | None:
     """Return the user associated with a token value."""
     payload = access_security._decode(token)
-    return await User.by_email(payload["subject"]["username"])
+    return await UserDocument.by_email(payload["subject"]["username"])

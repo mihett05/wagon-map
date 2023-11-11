@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Body, HTTPException, Response
 from pydantic import EmailStr
 
-from models.user import User, UserOut, UserRole, AdminUserAuth
+from models.user import UserOut, UserRole, AdminUserAuth
+from schemas.user import UserDocument
 from jwt import access_security, user_from_token
 from util.mail import send_password_reset_email
 from util.password import hash_password
@@ -25,11 +26,11 @@ async def register_operator(admin_user_auth: AdminUserAuth):  # type: ignore[no-
         raise HTTPException(403, "Permission denied")
 
     """Create a new user."""
-    user = await User.by_email(admin_user_auth.email)
+    user = await UserDocument.by_email(admin_user_auth.email)
     if user is not None:
         raise HTTPException(409, "User with that email already exists")
     hashed = hash_password(admin_user_auth.password)
-    user = User(email=admin_user_auth.email, password=hashed, role=UserRole.OPERATOR)
+    user = UserDocument(email=admin_user_auth.email, password=hashed, role=UserRole.OPERATOR)
     await user.create()
     return user
 
@@ -37,7 +38,7 @@ async def register_operator(admin_user_auth: AdminUserAuth):  # type: ignore[no-
 @register_router.post("/forgot-password")
 async def forgot_password(email: EmailStr = embed) -> Response:
     """Send password reset email."""
-    user = await User.by_email(email)
+    user = await UserDocument.by_email(email)
     if user is None:
         raise HTTPException(404, "No user found with that email")
     if user.email_confirmed_at is not None:

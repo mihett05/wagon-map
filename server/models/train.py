@@ -3,5 +3,6 @@ from pydantic import BaseModel
 
 class Train(BaseModel):
     id: int
-    coordinates: tuple[float, float]
+    lat: float
+    lon: float
     # ... остальные поля поезда

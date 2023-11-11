@@ -4,9 +4,10 @@ import redis
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 from config import config
-from models.user import User, UserRole
-from models.station import Station
-from models.path import Path
+from models.user import UserRole
+from schemas.user import UserDocument
+from schemas.station import StationDocument
+from schemas.path import PathDocument
 from schemas.train import TrainDocument
 from util.password import hash_password
 
@@ -20,17 +21,17 @@ async def init_db():
         database=client.data_wagon,
         document_models=[
             TrainDocument,
-            User,
-            Station,
-            Path,
+            UserDocument,
+            StationDocument,
+            PathDocument,
         ],
     )
 
     email = "admin@mail.ru"
-    user = await User.by_email(email)
+    user = await UserDocument.by_email(email)
     if user is None:
         hashed = hash_password("12345678")
-        await User(
+        await UserDocument(
             email=email,
             password=hashed,
             role=UserRole.ADMIN,

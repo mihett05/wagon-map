@@ -1,7 +1,5 @@
 import bcrypt
 
-from config import config
-
 
 def hash_password(password: str) -> str:
     """Return a salted password hash."""

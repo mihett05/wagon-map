@@ -3,11 +3,11 @@ from typing import Optional
 import pymongo
 from beanie import Document
 
-from models.train import Train
+from models.station import Station
 from schemas.geojson import GeoJSON
 
 
-class TrainDocument(Document):
+class StationDocument(Document):
     id: int
     coordinates: GeoJSON
 
@@ -15,11 +15,11 @@ class TrainDocument(Document):
         indexes = [[("coordinates", pymongo.GEOSPHERE)]]
 
     @classmethod
-    async def by_id(cls, id: int) -> Optional["TrainDocument"]:
+    async def by_id(cls, id: int) -> Optional["StationDocument"]:
         """Get a station by id."""
         return await cls.find_one(cls.id == id)
 
     @classmethod
-    def from_model(cls, station: Train):
-        return TrainDocument(**{"id": station.id,
-                                "coordinates": GeoJSON.point(lat=station.lat, lon=station.lon)})
+    def from_model(cls, station: Station):
+        return StationDocument(**{"id": station.id,
+                                  "coordinates": GeoJSON.point(lat=station.lat, lon=station.lon)})

@@ -3,7 +3,7 @@ from datetime import datetime, UTC
 from fastapi import APIRouter, Body, HTTPException, Response
 from pydantic import EmailStr
 
-from models.user import User
+from schemas.user import UserDocument
 from jwt import access_security, user_from_token
 from util.mail import send_verification_email
 
@@ -16,7 +16,7 @@ async def request_verification_email(
     email: EmailStr = Body(..., embed=True)
 ) -> Response:
     """Send the user a verification email."""
-    user = await User.by_email(email)
+    user = await UserDocument.by_email(email)
     if user is None:
         raise HTTPException(404, "No user found with that email")
     if user.email_confirmed_at is not None:
@@ -48,7 +48,7 @@ async def simple_verification(
     email: EmailStr = Body(..., embed=True)
 ) -> Response:
     """Send the user a verification email."""
-    user = await User.by_email(email)
+    user = await UserDocument.by_email(email)
     if user is None:
         raise HTTPException(404, "No user found with that email")
     if user.email_confirmed_at is not None:

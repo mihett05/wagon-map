@@ -1,10 +1,12 @@
 from pymongo.errors import DuplicateKeyError
-from fastapi import APIRouter, WebSocket, status
+from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
 
 from init_server import redis_db
+from models.station import Station
 from models.train import Train
+from schemas.station import StationDocument
 from schemas.train import TrainDocument
 
 # from routes.web_socket import ConnectionManager, RequestHandler
@@ -40,11 +42,9 @@ async def test_redis(test_key: str, test_value: str):
     return JSONResponse(content=f"Key was not found")
 
 
-@basic_router.post("/test_mongo")
-async def test_mongo(body: Train):
-    train = TrainDocument(**{
-        "train_info": body
-    })
+@basic_router.post("/test_mongo/train")
+async def test_mongo_train(body: Train):
+    train = TrainDocument.from_model(body)
     try:
         await train.create()
     except DuplicateKeyError:
@@ -53,3 +53,16 @@ async def test_mongo(body: Train):
             detail="Train already exists",
         )
     return train
+
+
+@basic_router.post("/test_mongo/station")
+async def test_mongo_train(body: Station):
+    station = StationDocument.from_model(body)
+    try:
+        await station.create()
+    except DuplicateKeyError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Train already exists",
+        )
+    return station

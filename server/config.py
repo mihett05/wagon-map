@@ -2,8 +2,6 @@ import os
 
 from pydantic_settings import BaseSettings
 
-from decouple import config as decouple_config
-
 
 class Config(BaseSettings):
     SERVER_HOST: str = "0.0.0.0"
@@ -13,7 +11,7 @@ class Config(BaseSettings):
     REDIS_PORT: int = int(os.getenv('REDIS_PORT', default=6379))
 
     # Security settings
-    AUTH_JWT_SECRET_KEY: str = os.getenv("SECRET_KEY")
+    AUTH_JWT_SECRET_KEY: str = os.getenv("SECRET_KEY", default="89F4994C137BA7315508FF36999381F50E2C111BB436EE27EC3847D215CE4A51")
 
     # FastMail SMTP server settings
     MAIL_CONSOLE: bool = os.getenv("MAIL_CONSOLE", default=False)
