@@ -16,6 +16,4 @@ trains_router = APIRouter(
 @trains_router.get("/path")
 async def get_path(station_1: int, station_2: int, user: Annotated[UserDocument, Depends(get_user)]):
 
-    station_1, station_2 = await get_station(station_1), await get_station(station_2)
-
-    return JSONResponse(content={"way": get_shortest_path(station_1.id, station_2.id)})
+    return JSONResponse(content={"way": get_shortest_path(station_1, station_2)})
