@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import datetime
 import json
 import pickle
@@ -55,6 +56,16 @@ async def get_wagon(wagon_id: int):
 
     wagon = pickle.loads(cache)
     return JSONResponse(content=wagon.to_json(), status_code=200)
+
+
+@trains_router.get("/train/")
+async def get_all_trains():
+    result = defaultdict(list)
+    for wagon in redis_db.hscan_iter(name="wagon"):
+        wagon_data = pickle.loads(wagon[1])
+        result[wagon_data.train_index].append(wagon_data.to_json())
+
+    return JSONResponse(content=result, status_code=200)
 
 
 @trains_router.get("/train/{train_id}")
