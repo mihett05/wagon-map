@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import AccountModal from '~/components/accountModal';
 import DispatchersGrid from '~/components/dispatchers';
+import AppBarComponent from '~/components/appBar';
 
 export default function Account() {
   const [rows, setRows] = useState(() => [
@@ -54,6 +55,7 @@ export default function Account() {
   ]);
   return (
     <div>
+      <AppBarComponent />
       <Container maxWidth="sm">
         <CssBaseline />
         <AccountModal rows={rows} setRows={setRows} />

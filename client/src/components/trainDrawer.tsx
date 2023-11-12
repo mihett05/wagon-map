@@ -1,6 +1,15 @@
 import React from 'react';
-import { Drawer, Box, ListItem, List, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import _ from 'lodash';
+import {
+  Drawer,
+  Box,
+  ListItem,
+  List,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  Link,
+  Tooltip,
+} from '@mui/material';
 
 import LocationIcon from '~/assets/location.svg?react';
 import StStartIcon from '~/assets/st_start.svg?react';
@@ -8,7 +17,10 @@ import StEndIcon from '~/assets/st_end.svg?react';
 import TrainIcon from '~/assets/train.svg?react';
 import TimetableIcon from '~/assets/timetable.svg?react';
 
-import { Train } from '~/ws/train';
+import stations from '~/assets/stations.json';
+
+import { Train, Wagon } from '~/ws/train';
+import { Map } from 'leaflet';
 
 function chunkify(a, n, balanced) {
   if (n < 2) return [a];
@@ -41,13 +53,18 @@ function chunkify(a, n, balanced) {
   return out;
 }
 
-interface MapDrawer {
+interface TrainDrawerProps {
+  map: Map | null;
   train: Train | null;
   open: boolean;
   onClose: () => void;
 }
 
-function MapDrawer({ open, onClose, train }: MapDrawer) {
+function TrainDrawer({ open, onClose, train, map }: TrainDrawerProps) {
+  const findStation = (id: number) => {
+    return stations.find((st) => st.id === id);
+  };
+
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
       <Box
@@ -87,7 +104,24 @@ function MapDrawer({ open, onClose, train }: MapDrawer) {
             <ListItemText>
               Станция отправки
               <Box>
-                <b>{train?.route.start}</b>
+                <Link
+                  sx={{
+                    cursor: 'pointer',
+                  }}
+                >
+                  <b
+                    onClick={() => {
+                      if (train?.route.start) {
+                        const st = findStation(train?.route.start);
+                        if (st) {
+                          map?.panTo([st.lat, st.lon]);
+                        }
+                      }
+                    }}
+                  >
+                    {train?.route.start}
+                  </b>
+                </Link>
               </Box>
             </ListItemText>
           </ListItem>
@@ -98,7 +132,24 @@ function MapDrawer({ open, onClose, train }: MapDrawer) {
             <ListItemText>
               Станция прибытия
               <Box>
-                <b>{train?.route.end}</b>
+                <Link
+                  sx={{
+                    cursor: 'pointer',
+                  }}
+                >
+                  <b
+                    onClick={() => {
+                      if (train?.route.end) {
+                        const st = findStation(train?.route.end);
+                        if (st) {
+                          map?.panTo([st.lat, st.lon]);
+                        }
+                      }
+                    }}
+                  >
+                    {train?.route.end}
+                  </b>
+                </Link>
               </Box>
             </ListItemText>
           </ListItem>
@@ -114,11 +165,21 @@ function MapDrawer({ open, onClose, train }: MapDrawer) {
                 }}
               >
                 {train &&
-                  chunkify(train?.wagons, 4, true).map((list: number[]) => (
+                  chunkify(train?.wagons, 4, true).map((list: Wagon[]) => (
                     <List>
                       {list.map((w) => (
-                        <ListItem>
-                          <ListItemText>{w}</ListItemText>
+                        <ListItem key={w.wagon_id}>
+                          <ListItemText>
+                            <Tooltip title={`${w.st_id_disl} -> ${w.st_id_dest}`}>
+                              <Link
+                                sx={{
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                {w.wagon_id}
+                              </Link>
+                            </Tooltip>
+                          </ListItemText>
                         </ListItem>
                       ))}
                     </List>
@@ -132,4 +193,4 @@ function MapDrawer({ open, onClose, train }: MapDrawer) {
   );
 }
 
-export default MapDrawer;
+export default TrainDrawer;

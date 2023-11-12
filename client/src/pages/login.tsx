@@ -1,6 +1,7 @@
 import React from 'react';
 import BackgroundImage from '../assets/images/background.png';
 import LoginForm from '~/components/loginForm';
+import AppBarComponent from '~/components/appBar';
 
 const styles = {
   header: {
@@ -21,11 +22,14 @@ const styles = {
 
 function LoginPage() {
   return (
-    <div style={styles.header}>
-      <div style={styles.content}>
-        <LoginForm />
+    <>
+      <AppBarComponent />
+      <div style={styles.header}>
+        <div style={styles.content}>
+          <LoginForm />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

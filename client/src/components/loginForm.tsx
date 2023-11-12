@@ -10,10 +10,13 @@ import Container from '@mui/material/Container';
 import { Card, CardContent } from '@mui/material';
 
 import { login } from '~/api/auth';
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
+  const navigate = useNavigate();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    navigate('/account');
     const data = new FormData(event.currentTarget);
     const email = data.get('email')?.toString().trim();
     const password = data.get('password')?.toString().trim();

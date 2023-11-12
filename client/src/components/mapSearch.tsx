@@ -19,9 +19,23 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function MapSearch() {
   const [icon, setIcon] = useState('0');
+  const [int, setInt] = useState<number | null>(null);
+  const [value, setValue] = useState<string>('');
 
   const handleChange = (event: SelectChangeEvent) => {
     setIcon(event.target.value);
+  };
+
+  const onInput = (v: string) => {
+    if (int === null) {
+      clearTimeout(int);
+    }
+    setValue(value);
+    setInt(
+      setTimeout(() => {
+        console.log(value);
+      }, 300) as number,
+    );
   };
 
   return (
@@ -62,6 +76,7 @@ function MapSearch() {
           <Autocomplete
             disablePortal
             id="combo-box-demo"
+            includeInputInList
             options={stations}
             getOptionLabel={(option) => option.id}
             popupIcon={<SearchIcon />}
@@ -74,6 +89,7 @@ function MapSearch() {
               },
             }}
             renderInput={(params) => <TextField {...params} label="" variant="outlined" />}
+            onChange={(e, v) => console.log(v)}
           />
         </Grid>
       </Grid>

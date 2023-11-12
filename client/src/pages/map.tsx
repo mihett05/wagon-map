@@ -6,31 +6,33 @@ import { MapContainer, TileLayer, LayerGroup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { queryWay, Node, Way } from '~/geo/overpass';
 import MapSearch from '~/components/mapSearch';
-import MapDrawer from '~/components/mapDrawer';
+import TrainDrawer from '~/components/trainDrawer';
+import StationDrawer from '~/components/stationDrawer';
 
 import stations from '~/assets/stations.json';
 import { useWs } from '~/ws/useWs';
 import { train, Train } from '~/ws/train';
-
-type Station = {
-  id: number;
-  lat: number;
-  lon: number;
-  name: string;
-  type: string;
-};
+import { Station } from '~/ws/station';
 
 function MapPage() {
   const theme = useTheme();
   const [map, setMap] = useState<LeafletMap | null>(null);
   const ws = useWs();
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selectedTrainIndex, setSelectedTrainIndex] = useState<string | null>(null);
+  const [selecetdStationId, setSelectedStationId] = useState<number | null>(null);
   const [currentPath, setCurrentPath] = useState<Polyline | null>(null);
   const [trains, setTrains] = useState<Train[]>([]);
 
   const selectedTrain = useMemo<Train | null>(
-    () => (selected === null ? null : trains.filter((t) => t.index === selected)[0]),
-    [selected, trains],
+    () =>
+      selectedTrainIndex === null ? null : trains.filter((t) => t.index === selectedTrainIndex)[0],
+    [selectedTrainIndex, trains],
+  );
+
+  const selectedStation = useMemo<Station | null>(
+    () =>
+      selecetdStationId === null ? null : stations.filter((s) => s.id === selecetdStationId)[0],
+    [selecetdStationId],
   );
 
   // TODO: ws handler
@@ -48,17 +50,6 @@ function MapPage() {
   }, []);
 
   useEffect(() => {
-    if (map !== null) {
-      (stations as Station[]).forEach((station) => {
-        circle([station.lat, station.lon], {
-          radius: 200,
-          color: theme.palette.primary.main,
-        }).addTo(map);
-      });
-    }
-  }, [map]);
-
-  useEffect(() => {
     if (map !== null && ws !== null) {
       map.on('zoom', () => {
         const bounds = map.getBounds();
@@ -73,7 +64,6 @@ function MapPage() {
 
   return (
     <Box>
-      <MapDrawer open={selected !== null} onClose={() => setSelected(null)} train={selectedTrain} />
       <MapContainer
         // eslint-disable-next-line
         // @ts-ignore
@@ -99,6 +89,11 @@ function MapPage() {
               center={[station.lat, station.lon]}
               radius={200}
               color={theme.palette.primary.main}
+              eventHandlers={{
+                click: () => {
+                  setSelectedStationId(station.id);
+                },
+              }}
             />
           ))}
         </LayerGroup>
@@ -110,7 +105,7 @@ function MapPage() {
               radius={100}
               eventHandlers={{
                 click: () => {
-                  setSelected(t.index);
+                  setSelectedTrainIndex(t.index);
                 },
               }}
             />
@@ -118,6 +113,17 @@ function MapPage() {
         </LayerGroup>
 
         <MapSearch />
+        <TrainDrawer
+          open={selectedTrainIndex !== null}
+          onClose={() => setSelectedTrainIndex(null)}
+          train={selectedTrain}
+          map={map}
+        />
+        <StationDrawer
+          open={selecetdStationId !== null}
+          onClose={() => setSelectedStationId(null)}
+          station={selectedStation}
+        />
       </MapContainer>
     </Box>
   );

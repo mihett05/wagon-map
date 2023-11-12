@@ -7,9 +7,11 @@ import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 import Logo from '../assets/images/logo.png';
+import { useNavigate } from 'react-router-dom';
 
 function AppBarComponent() {
   const [auth, setAuth] = React.useState(true);
+  const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAuth(event.target.checked);
@@ -24,7 +26,7 @@ function AppBarComponent() {
               <Box
                 component="img"
                 sx={{
-                  width: 100
+                  width: 100,
                 }}
                 alt="Logo"
                 src={Logo}
@@ -38,7 +40,7 @@ function AppBarComponent() {
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
                   color="primary"
-                  href={`/map`}
+                  onClick={() => navigate('/map')}
                 >
                   <MapOutlinedIcon />
                 </IconButton>
@@ -49,7 +51,7 @@ function AppBarComponent() {
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
                   color="primary"
-                  href={`/account`}
+                  onClick={() => navigate('/account')}
                 >
                   <PersonOutlineOutlinedIcon />
                 </IconButton>
