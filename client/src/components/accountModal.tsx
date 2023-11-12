@@ -5,6 +5,11 @@ import Modal from '@mui/material/Modal';
 import AddIcon from '@mui/icons-material/Add';
 import { Grid, TextField } from '@mui/material';
 
+interface AccountModalProps {
+  rows: any[];
+  setRows: (state: any) => any;
+}
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -16,7 +21,7 @@ const style = {
   p: 4,
 };
 
-export default function AccountModal() {
+export default function AccountModal({ rows, setRows }: AccountModalProps) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -108,18 +113,16 @@ export default function AccountModal() {
               />
             </Grid>
           </Grid>
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} href={`/map`}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={handleClose}
+          >
             Создать аккаунт
           </Button>
         </Box>
-        {/* <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Box> */}
       </Modal>
     </div>
   );
