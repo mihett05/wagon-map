@@ -23,3 +23,8 @@ class StationDocument(Document):
     def from_model(cls, station: Station):
         return StationDocument(**{"id": station.id,
                                   "coordinates": GeoJSON.point(lat=station.lat, lon=station.lon)})
+
+    @classmethod
+    def from_values(cls, station_id: int, lat: float, lon: float):
+        return StationDocument(**{"id": station_id,
+                                  "coordinates": GeoJSON.point(lat=lat, lon=lon)})

@@ -21,7 +21,7 @@ async def login(user_auth: UserAuth) -> RefreshToken:
         raise HTTPException(status_code=400, detail="Email is not yet verified")
     access_token = access_security.create_access_token(user.jwt_subject)
     refresh_token = refresh_security.create_refresh_token(user.jwt_subject)
-    return RefreshToken(access_token=access_token, refresh_token=refresh_token)
+    return RefreshToken(access_token=access_token, refresh_token=refresh_token, user_role=user.role)
 
 
 @auth_router.post("/refresh")
