@@ -94,13 +94,25 @@ async def get_train(train_id: str):
 
         redis_db.hset(name="train_path", key=train_id, value=json.dumps(json_paths))
 
-    mean_time = get_mean_time(start_node_id, end_node_id, cumulative_distances[-1])
-    time_stamp = datetime.now() - wagons[0].operdate
+    # mean_time = get_mean_time(start_node_id, end_node_id, cumulative_distances[-1])
+    time_stamp = datetime.now().timestamp() - wagons[0].operdate.timestamp()
 
-    print(time_stamp)
-    coords = calculate_coords
+    coords = calculate_coords(coords_path=path, cumulative_distances=cumulative_distances,
+                              timestamp=time_stamp)
 
-    return JSONResponse(status_code=200, content=[w.to_json() for w in wagons])
+    return JSONResponse(status_code=200, content={
+        "index": train_id,
+        "position": [coords[0], coords[1]],
+        "route": {
+            "start": start_node_id,
+            "end": end_node_id
+        },
+        "velocity": {
+            "x": coords[2],
+            "y": coords[3]
+        },
+        "wagons": [wagon.to_json() for wagon in wagons]
+    })
 
 
 @trains_router.get("/path")
