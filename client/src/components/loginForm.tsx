@@ -9,34 +9,17 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Card, CardContent } from '@mui/material';
 
-// import { ThemeProvider } from '@mui/material/styles';
-// import { theme } from '~/lib/theme';
-
-// const styles = {
-//   header: {
-//     backgroundImage: `url(${BackgroundImage})`,
-//     height: '100vh',
-//     backgroundPosition: 'center',
-//     backgroundRepeat: 'no-repeat',
-//     backgroundSize: 'cover',
-//   },
-
-//   content: {
-//     height: '100%',
-//     width: '100%',
-//     backgroundColor: 'rgba(255, 255, 255, 0.8)',
-//     padding: 50,
-//   },
-// };
+import { login } from '~/api/auth';
 
 function LoginForm() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('login'),
-      password: data.get('password'),
-    });
+    const email = data.get('email')?.toString().trim();
+    const password = data.get('password')?.toString().trim();
+    if (email && password) {
+      await login(email, password);
+    }
   };
 
   return (
@@ -59,10 +42,10 @@ function LoginForm() {
               margin="normal"
               required
               fullWidth
-              id="login"
-              label="Логин"
-              name="login"
-              autoComplete="login"
+              id="email"
+              label="E-Mail"
+              name="email"
+              autoComplete="email"
               autoFocus
             />
             <TextField
@@ -75,7 +58,7 @@ function LoginForm() {
               id="password"
               autoComplete="current-password"
             />
-            <Button fullWidth variant="contained" sx={{ mt: 2, mb: 4 }} href={`/map`}>
+            <Button fullWidth variant="contained" sx={{ mt: 2, mb: 4 }} type="submit">
               Войти
             </Button>
 
