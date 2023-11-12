@@ -2,9 +2,6 @@ import React from 'react';
 import BackgroundImage from '../assets/images/background.png';
 import LoginForm from '~/components/loginForm';
 
-// import { ThemeProvider } from '@mui/material/styles';
-// import { theme } from '~/lib/theme';
-
 const styles = {
   header: {
     backgroundImage: `url(${BackgroundImage})`,
@@ -23,15 +20,6 @@ const styles = {
 };
 
 function LoginPage() {
-  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get('email'),
-  //     password: data.get('password'),
-  //   });
-  // };
-
   return (
     <div style={styles.header}>
       <div style={styles.content}>
