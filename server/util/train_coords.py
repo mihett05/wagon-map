@@ -9,11 +9,14 @@ with open(f"{os.path.dirname(os.path.realpath(__file__))}/../static_data/times_t
     data = {tuple(d["pair"]): d["times"] for d in data}
 
 
-def get_mean_time(node_1: int, node_2: int, distance: float) -> float:
+def get_mean_time(node_1: int, node_2: int, distance: float | None = None) -> float | None:
     time = data.get((node_1, node_2))  # На основе исторических данных
 
     if time is not None:
         return time
+
+    if distance is None:
+        return None
 
     return distance / AVG_TRAIN_SPEED  # Если нет исторических данных о времени рассчитать его
 
