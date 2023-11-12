@@ -2,7 +2,7 @@
 # Uses multi-stage builds requiring Docker 17.05 or higher
 
 # Creating a python base with shared environment variables
-FROM  python:3.11-slim AS python-base
+FROM python:3.11 AS python-base
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=off \
