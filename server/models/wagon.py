@@ -16,8 +16,3 @@ class Wagon(BaseModel):
                 "st_id_disl": self.st_id_disl,
                 "st_id_dest": self.st_id_dest,
                 "train_index": self.train_index}
-
-
-class WagonPosition(Wagon):
-    lat: float
-    lon: float

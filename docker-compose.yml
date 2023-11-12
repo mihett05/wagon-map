@@ -17,6 +17,7 @@ services:
       - "MONGO_URL=mongodb://mongo_db:27017/db"
       - "REDIS_HOST=redis_db"
       - "REDIS_PORT=6379"
+      - "INIT_DB_VALUES=true"
       # Security
       - "SECRET_KEY=89F4994C137BA7315508FF36999381F50E2C111BB436EE27EC3847D215CE4A51"
     ports:

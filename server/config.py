@@ -7,6 +7,7 @@ class Config(BaseSettings):
     SERVER_HOST: str = "0.0.0.0"
     SERVER_PORT: int = 8000
     MONGO_URL: str = "mongodb://localhost:27017/db"
+    INIT_DB_VALUES: bool = os.getenv('INIT_DB_VALUES', default=False)
     REDIS_HOST: str = os.getenv('REDIS_HOST', default="0.0.0.0")
     REDIS_PORT: int = int(os.getenv('REDIS_PORT', default=6379))
 

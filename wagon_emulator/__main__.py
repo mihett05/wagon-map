@@ -54,7 +54,7 @@ while True:
         index -= 10
         break
 
-sleep(10)
+# sleep(120)
 
 try:
     while True:
