@@ -2,6 +2,7 @@ import csv
 import os
 from datetime import datetime
 from time import sleep
+from typing import List
 
 import requests
 
@@ -33,7 +34,7 @@ def make_request(wagon: WagonData):
         print(e.response.text)
 
 
-wagon_data: list[WagonData] = []
+wagon_data: List[WagonData] = []
 index = 0
 
 with open('disl_one_day.csv', newline='') as csvfile:
