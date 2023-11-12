@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from init_server import init_db
-from routes.basic_route import basic_router
 from routes.auth import auth_router
 from routes.mail import mail_router
 from routes.register import register_router
@@ -22,7 +21,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(basic_router)
 app.include_router(auth_router)
 app.include_router(mail_router)
 app.include_router(register_router)

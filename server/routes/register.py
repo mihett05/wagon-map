@@ -1,7 +1,10 @@
-from fastapi import APIRouter, Body, HTTPException, Response
+from typing import Annotated
+
+from fastapi import APIRouter, Body, HTTPException, Response, Depends
 from pydantic import EmailStr
 
 from models.user import UserOut, UserRole, AdminUserAuth
+from routes.deps import get_user
 from schemas.user import UserDocument
 from jwt import access_security, user_from_token
 from util.mail import send_password_reset_email
@@ -13,7 +16,7 @@ embed = Body(..., embed=True)
 
 
 @register_router.post("", response_model=UserOut)
-async def register_operator(admin_user_auth: AdminUserAuth):  # type: ignore[no-untyped-def]
+async def register_operator(admin_user_auth: AdminUserAuth):
     # Verify admin role
     user = await user_from_token(admin_user_auth.token)
     if user is None:
@@ -33,6 +36,14 @@ async def register_operator(admin_user_auth: AdminUserAuth):  # type: ignore[no-
     user = UserDocument(email=admin_user_auth.email, password=hashed, role=UserRole.OPERATOR)
     await user.create()
     return user
+
+
+@register_router.get("")
+async def get_users(user: Annotated[UserDocument, Depends(get_user)]):
+    if user.role != UserRole.ADMIN:
+        raise HTTPException(403, "Permission denied")
+
+    return await UserDocument.find().to_list()
 
 
 @register_router.post("/forgot-password")

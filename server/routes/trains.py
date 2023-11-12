@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import pickle
 from typing import Annotated
@@ -17,6 +18,8 @@ from util.overpass import find_path
 import itertools
 from geopy import distance
 
+from util.train_coords import get_mean_time, calculate_coords
+
 trains_router = APIRouter(
     prefix="/trains",
     tags=["trains"]
@@ -25,6 +28,8 @@ trains_router = APIRouter(
 
 @trains_router.post("/wagon/{wagon_id}")
 async def add_wagon(body: Wagon):
+    body.operdate = datetime.now()  # Set current time as start time
+
     pickled_wagon = pickle.dumps(body)
     redis_db.hset(name="wagon", key=body.wagon_id, value=pickled_wagon)
 
@@ -63,9 +68,9 @@ async def get_train(train_id: str):
     if len(wagons) == 0:
         return JSONResponse(status_code=404, content=f"Train with {train_id=} was not found")
 
-    start_node = wagons[0].st_id_disl
-    end_node = int(train_id.split("-")[2])
-    end_node = get_shortest_path(start_node, end_node)[1]
+    start_node_id = wagons[0].st_id_disl
+    end_node_id = int(train_id.split("-")[2])
+    end_node_id = get_shortest_path(start_node_id, end_node_id)[1]
 
     cache = redis_db.hget(name="train_path", key=train_id)
 
@@ -73,8 +78,8 @@ async def get_train(train_id: str):
         json_paths = json.loads(cache)
         path, cumulative_distances = json_paths["coords_path"], json_paths["cumulative_distances"]
     else:
-        start_node = await StationDocument.by_id(start_node)
-        end_node = await StationDocument.by_id(end_node)
+        start_node = await StationDocument.by_id(start_node_id)
+        end_node = await StationDocument.by_id(end_node_id)
 
         path = await find_path(start_node.coordinates.get_coords(), end_node.coordinates.get_coords())
 
@@ -89,7 +94,13 @@ async def get_train(train_id: str):
 
         redis_db.hset(name="train_path", key=train_id, value=json.dumps(json_paths))
 
-    return JSONResponse(status_code=200, content=cumulative_distances)
+    mean_time = get_mean_time(start_node_id, end_node_id, cumulative_distances[-1])
+    time_stamp = datetime.now() - wagons[0].operdate
+
+    print(time_stamp)
+    coords = calculate_coords
+
+    return JSONResponse(status_code=200, content=[w.to_json() for w in wagons])
 
 
 @trains_router.get("/path")
